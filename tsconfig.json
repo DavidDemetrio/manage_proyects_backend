@@ -1,0 +1,19 @@
+{
+    "compilerOptions": { // opciones de como TS compila el código
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "lib": [ //define las bibliotecas que TS usará para compilar el código
+            "esnext" // en este caso, usa las últimas características disponibles de ECMAScript
+        ],
+        "target": "ESNext", // Establece la versión a la que se transpilará el código a JS, es decir las últimas características disponibles de ECMAScript
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext", // define que los módulos en JS se generan como ESM (import use)
+        "strict": false, // Desactiva todas las comprobaciones estrictas de TS (tipos estrictos, null, undefined, etc.).
+        "sourceMap": true, // Ayuda a depurar el código transpilado de ts en los navegadores generando archivo .map
+        "esModuleInterop": true, // Ayuda con la interpolaridad de importar módulos commonjs, permitiendo importar commonjs a imports
+        "declaration": true // Genera archivos .d.ts que es para que otros desarrolladores al usar tu codigo puedan ver los tipos que usaste y verificacion de tipos, esto es true cuando tu proyecto es una librería o un framework
+    },
+    "include": [
+        "src/**/*.ts" // todos los archivos que se deben incluir en la compilacion
+    ]
+}

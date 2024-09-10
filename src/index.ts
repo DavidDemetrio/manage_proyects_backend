@@ -1,8 +1,9 @@
-import colors from "colors";
+import "dotenv/config";
 import server from "./server";
+import logger from "./shared/logger";
 
 const PORT = process.env.PORT || "4000";
 
 server.listen(PORT, () => {
-    console.log(colors.green.bold(`[CONEXION SERVER SUCCESS]: Server is running on port ${PORT}`));
+    logger.success(`[CONEXION SERVER SUCCESS]: Server is running on port ${PORT}`);
 });

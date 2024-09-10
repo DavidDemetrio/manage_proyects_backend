@@ -1,0 +1,8 @@
+¿Qué es Mongoose?
+
+ODM (Object Document Mapping)
+Para poder consultar y almacenar los datos en los documentos de una o 
+mas collecciones de una base de datos no relacional.
+
+Es de los más usados y más utilez de Node, debido a la sencilles
+con la que se pueden operar las collecciones y documentos de una db no relacional.

@@ -49,7 +49,7 @@ export class ProjectController {
 
         try {
             const project = await Project.findByIdAndUpdate(id, req.body);
-            
+
             if (!project) {
                 const error = new Error("Projecto no encontrado")
 
@@ -61,6 +61,32 @@ export class ProjectController {
             await project.save();
 
             res.send('Proyecto actualizado')
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    static deleteProject = async (req: Request, res: Response) => {
+        const { id } = req.params;
+
+        try {
+            const project = await Project.findById(id);
+
+            /**
+             * Es importante el manejo de los errores, porque en express
+             * al no manejarlos, se truena la aplicación
+            */
+            if (!project) {
+                const error = new Error("Projecto no encontrado")
+
+                return res.status(400).json({
+                    error: error.message
+                });
+            }
+
+            await project.deleteOne();
+
+            res.send('Proyecto eliminado');
         } catch (error) {
             console.log(error);
         }

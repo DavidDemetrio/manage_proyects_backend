@@ -13,6 +13,8 @@ router.post('/',
     body('description')
         .notEmpty().withMessage('La descripción es Obligatoria'),
     handleInputErrors,
-    ProjectController.createProject)
+    ProjectController.createProject);
+
 router.get('/', ProjectController.getAllProjects)
+
 export default router;

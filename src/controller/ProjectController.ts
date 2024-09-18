@@ -5,7 +5,7 @@ import logger from "../shared/logger";
 export class ProjectController {
     static createProject = async (req: Request, res: Response) => {
         const project = new Project(req.body);  // 1rst option instance project of Project
-                                                // this form you can more option when create instance
+        // this form you can more option when create instance
         try {
             await project.save(); // save de object
             // await Project.create(req.body); // second option create de project from create method static
@@ -16,6 +16,11 @@ export class ProjectController {
     }
 
     static getAllProjects = async (req: Request, res: Response) => {
-        res.send('Todos los proyectos');
+        try {
+            const projects = await Project.find({});
+            res.json(projects);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }

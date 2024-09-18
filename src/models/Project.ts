@@ -12,7 +12,7 @@ const ProjectSchema: Schema = new Schema({
         require: true, // este campo es obligatorio
         trim: true // hacer operaciones internas
     },
-    clienttName: {
+    clientName: {
         type: String,
         require: true, // este campo es obligatorio
         trim: true // hacer operaciones internas

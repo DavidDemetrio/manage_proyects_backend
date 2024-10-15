@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
+import { validateProjectExists } from "../middleware/project";
 import { ProjectController } from "../controller/ProjectController";
 import { TaskController } from "../controller/TaskController";
 
@@ -42,6 +43,7 @@ router.delete('/:id',
 
 /* ROUTES TO TASKS */
 router.post('/:projectId/tasks',  //Nested Resource Routing / Enrutamiento de Recursos Anidados
+    validateProjectExists,
     TaskController.createTask);
 
 export default router;

@@ -17,7 +17,7 @@ export interface ITask extends Document {
     status: TaskStatus
 }
 
-export const TaskSchema:Schema = new Schema({
+export const TaskSchema: Schema = new Schema({
     name: {
         type: String,
         trim: true,
@@ -38,7 +38,7 @@ export const TaskSchema:Schema = new Schema({
         default: taskStatus.PENDING
     }
 }, { timestamps: true }); // timestamps lo que hace es que por DEFAULT, almacena la fecha de creación
-                          // y actualización de las tareas
+// y actualización de las tareas
 
 const Task = mongoose.model<ITask>('Task', TaskSchema);
 

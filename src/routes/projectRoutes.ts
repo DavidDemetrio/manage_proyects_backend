@@ -52,9 +52,14 @@ router.post('/:projectId/tasks',  //Nested Resource Routing / Enrutamiento de Re
     handleInputErrors,
     TaskController.createTask);
 
-router.get('/:projectId/tasks', 
+router.get('/:projectId/tasks',
     validateProjectExists,
     TaskController.getProjectTasks
+);
+
+router.get('/:projectId/tasks/:taskId',
+    validateProjectExists,
+    TaskController.getTaskById
 );
 
 export default router;

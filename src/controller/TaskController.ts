@@ -38,4 +38,34 @@ export class TaskController {
             res.status(500).json({ error: 'Hubo un error' });
         }
     }
+
+    static getTaskById = async (req: Request, res: Response) => {
+        try {
+            const { taskId } = req.params;
+
+            const task = await Task.findById(taskId);
+
+            if (!task) {
+                const error = new Error('Tarea no encontrada');
+                /**
+                 * 404 (404 Not Found): Indica que el servidor no pudo
+                 * encontrar el recurso solicitado por el cliente.
+                 * BUENA OPCIÓN PARA INDICAR QUE EL RECURSO SOLICITADO
+                 * NO SE SE SABE SI ESTÁ TEMPORALMENTE O PERMANENTEMENTE
+                 * INACCESIBLE. (410) es lo contrario
+                */
+                return res.status(404).json({ error: error.message });
+            }
+
+            if (task.project.toString() !== req.project.id) {
+                const error = new Error('Acción no válida');
+
+                return res.status(400).json({ error: error.message });
+            }
+
+            res.json(task);
+        } catch (error) {
+            res.status(500).json({ error: 'Hubo un error' });
+        }
+    }
 }

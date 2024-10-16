@@ -33,6 +33,15 @@ export class ProjectController {
             if (!project) {
                 const error = new Error("Projecto no encontrado")
 
+                /**
+                 * Nota:
+                 * 400 (Bad Request): El servidor no puede procesar la
+                 * petición debido a un error del cliente.
+                 * Estos errores pueden ser:
+                 *  - Sintáxis de petición mal formada.
+                 *  - Enrutamiento engañoso de peticiones.
+                 *  - etc. 
+                */
                 return res.status(400).json({
                     error: error.message
                 });

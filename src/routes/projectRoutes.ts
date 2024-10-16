@@ -7,6 +7,7 @@ import { TaskController } from "../controller/TaskController";
 
 const router = Router();
 
+/* ROUTES PROJECT */
 router.post('/',
     body('projectName')
         .notEmpty().withMessage('El nombre del Proyecto es Obligatorio'),
@@ -41,9 +42,19 @@ router.delete('/:id',
     handleInputErrors,
     ProjectController.deleteProject);
 
-/* ROUTES TO TASKS */
+/* ROUTES TASKS */
 router.post('/:projectId/tasks',  //Nested Resource Routing / Enrutamiento de Recursos Anidados
     validateProjectExists,
+    body('name')
+        .notEmpty().withMessage('El nombre de la tarea es Obligatoria'),
+    body('description')
+        .notEmpty().withMessage('El nombre de la descripción es Obligatoria'),
+    handleInputErrors,
     TaskController.createTask);
+
+router.get('/:projectId/tasks', 
+    validateProjectExists,
+    TaskController.getProjectTasks
+);
 
 export default router;

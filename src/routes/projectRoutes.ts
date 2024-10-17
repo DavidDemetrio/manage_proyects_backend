@@ -7,6 +7,9 @@ import { TaskController } from "../controller/TaskController";
 
 const router = Router();
 
+// donde se use :projectId params, primero se ejecuta este middleware
+router.param("projectId", validateProjectExists);
+
 /* ROUTES PROJECT */
 router.post('/',
     body('projectName')
@@ -44,7 +47,6 @@ router.delete('/:id',
 
 /* ROUTES TASKS */
 router.post('/:projectId/tasks',  //Nested Resource Routing / Enrutamiento de Recursos Anidados
-    validateProjectExists,
     body('name')
         .notEmpty().withMessage('El nombre de la tarea es Obligatoria'),
     body('description')
@@ -53,13 +55,21 @@ router.post('/:projectId/tasks',  //Nested Resource Routing / Enrutamiento de Re
     TaskController.createTask);
 
 router.get('/:projectId/tasks',
-    validateProjectExists,
     TaskController.getProjectTasks
 );
 
 router.get('/:projectId/tasks/:taskId',
-    validateProjectExists,
+    param('taskId').isMongoId().withMessage("ID no válido"),
+    handleInputErrors,
     TaskController.getTaskById
 );
+
+router.put('/:projectId/tasks/:taskId',
+    param('taskId').isMongoId().withMessage('ID no válido'),
+    body('name').notEmpty().withMessage('El nombre de la tarea es obligatorio'),
+    body('description').notEmpty().withMessage('La descripción de la tarea es obligatoria'),
+    handleInputErrors,
+    TaskController.updateTask
+)
 
 export default router;

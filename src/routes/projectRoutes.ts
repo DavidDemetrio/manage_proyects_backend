@@ -2,6 +2,7 @@ import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
 import { validateProjectExists } from "../middleware/project";
+import { taskExist } from "../middleware/task";
 import { ProjectController } from "../controller/ProjectController";
 import { TaskController } from "../controller/TaskController";
 
@@ -9,6 +10,13 @@ const router = Router();
 
 // donde se use :projectId params, primero se ejecuta este middleware
 router.param("projectId", validateProjectExists);
+
+/**
+ * Me quedé en llamar a este middleware en las rutas donde se
+ * envía :taskId y sustituir el código. También me falta ver el
+ * último video de backend.
+*/
+router.param('taskId', taskExist);
 
 /* ROUTES PROJECT */
 router.post('/',
@@ -71,5 +79,18 @@ router.put('/:projectId/tasks/:taskId',
     handleInputErrors,
     TaskController.updateTask
 )
+
+router.delete('/:projectId/tasks/:taskId',
+    param('taskId').isMongoId().withMessage('ID no válido'),
+    handleInputErrors,
+    TaskController.deleteTask
+)
+
+router.post('/:projectId/tasks/:taskId/status',
+    param('taskId').isMongoId().withMessage('ID no válido'),
+    body('status').notEmpty().withMessage('El estado es obligatorio'),
+    handleInputErrors,
+    TaskController.updateStatus
+);
 
 export default router;

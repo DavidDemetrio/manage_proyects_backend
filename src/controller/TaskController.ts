@@ -73,7 +73,7 @@ export class TaskController {
         try {
             const { taskId } = req.params;
 
-            const task = await Task.findByIdAndUpdate(taskId, req.body);
+            const task = await Task.findById(taskId);
 
             if (!task) {
                 const error = new Error('Tarea no encontrada');
@@ -87,9 +87,69 @@ export class TaskController {
                 res.status(400).json({ error: error.message });
             }
 
+            task.name = req.body.name;
+            task.description = req.body.description;
+            await task.save();
             res.send("Tarea actualizada correctamente");
         } catch (error) {
+            console.log(error);
+        }
+    }
+
+    static deleteTask = async (req: Request, res: Response) => {
+        try {
+            const { taskId } = req.params;
+
+            const task = await Task.findById(taskId);
+
+            if (!task) {
+                const error = new Error('Tarea no encontrada');
+
+                return res.status(404).json({ error: error.message });
+            }
+
+            if (task.project.toString() !== req.project.id) {
+                const error = new Error('Acción no válida');
+
+                res.status(400).json({ error: error.message });
+            }
+
+            // Se elimina la tarea desde el parametro req.project
+            req.project.tasks = req.project.tasks.filter(task => task.toString() !== taskId);
+            /**
+             * Pero es hasta este punto que se manda actualizar
+             * en los documentos de task y project (o sea en la base de datos).
+            */
+            await Promise.allSettled([task.deleteOne(), req.project.save()]);
+
+            res.send("Tarea eliminada correctamente");
+        } catch (error) {
             res.status(500).json({ error: 'Hubo un error' });
+        }
+    }
+
+    static updateStatus = async (req: Request, res: Response) => {
+        try {
+            const { taskId } = req.params;
+            const task = await Task.findById(taskId);
+
+            if (!task) {
+                const error = new Error('Tarea no encontrada');
+                return res.status(404).json({ error: error.message });
+            }
+
+            if (task.project.toString() !== req.project.id) {
+                const error = new Error('Acción no válida');
+                res.status(400).json({ error: error.message });
+            }
+
+            const { status } = req.body;
+            task.status = status;
+            await task.save();
+
+            res.send('Tarea actualizada');
+        } catch (error) {
+            console.log(error);
         }
     }
 }

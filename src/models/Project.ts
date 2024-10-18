@@ -9,7 +9,8 @@ export interface IProject extends Document {
     projectName: string
     clientName: string
     description: string
-    tasks: PopulatedDoc<ITask & Document>[] // se pone [], porque un proyecto puede tener múltiple tareas
+    // tasks: PopulatedDoc<ITask & Document>[] // se pone [], porque un proyecto puede tener múltiple tareas
+    tasks: Types.ObjectId[] // se pone [], porque un proyecto puede tener múltiple tareas
 };
 
 const ProjectSchema: Schema = new Schema({

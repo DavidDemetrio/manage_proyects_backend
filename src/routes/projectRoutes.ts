@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
 import { validateProjectExists } from "../middleware/project";
-import { taskExist } from "../middleware/task";
+import { taskBelongsToProject, taskExist } from "../middleware/task";
 import { ProjectController } from "../controller/ProjectController";
 import { TaskController } from "../controller/TaskController";
 
@@ -11,12 +11,8 @@ const router = Router();
 // donde se use :projectId params, primero se ejecuta este middleware
 router.param("projectId", validateProjectExists);
 
-/**
- * Me quedé en llamar a este middleware en las rutas donde se
- * envía :taskId y sustituir el código. También me falta ver el
- * último video de backend.
-*/
 router.param('taskId', taskExist);
+router.param('taskId', taskBelongsToProject);
 
 /* ROUTES PROJECT */
 router.post('/',

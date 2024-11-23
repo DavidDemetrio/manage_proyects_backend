@@ -10,7 +10,16 @@ export class ProjectController {
             await project.save(); // save de object
             // await Project.create(req.body); // second option create de project from create method static
             res.send('Proyecto creado con éxito.');
-        } catch (error) {
+        } catch (error: any) {
+            // Error de moongose
+            if (error.code == 11000) {
+                return res.status(400).json({
+                    error: "El proyecto ya existe.",
+                    duplicatedKey: error.keyValue
+                });
+            }
+
+            // Manejar otros errores
             logger.error(error as string);
         }
     }
@@ -70,7 +79,7 @@ export class ProjectController {
             project.projectName = req.body.projectName;
             project.clientName = req.body.clientName;
             project.description = req.body.description;
-            
+
             await project.save();
             res.send('Proyecto actualizado')
         } catch (error) {

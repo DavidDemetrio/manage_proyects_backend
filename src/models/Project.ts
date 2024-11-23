@@ -1,5 +1,4 @@
-import mongoose, { Schema, Document, PopulatedDoc, Types } from "mongoose";
-import { ITask } from "./Task";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 /* Nota: TypeScript trabaja complejamente los documentos
 ya en proyectos grandes, para solucionar esto, hacemos uso
@@ -17,12 +16,14 @@ const ProjectSchema: Schema = new Schema({
     projectName: {
         type: String,
         require: true, // este campo es obligatorio
-        trim: true // hacer operaciones internas
+        trim: true, // hacer operaciones internas
+        unique: true
     },
     clientName: {
         type: String,
         require: true, // este campo es obligatorio
-        trim: true // hacer operaciones internas
+        trim: true, // hacer operaciones internas
+        unique: true
     },
     description: {
         type: String,
@@ -36,6 +37,7 @@ const ProjectSchema: Schema = new Schema({
         }
     ]
 }, { timestamps: true });
+
 
 const Project = mongoose.model<IProject>('Project', ProjectSchema);
 export default Project;

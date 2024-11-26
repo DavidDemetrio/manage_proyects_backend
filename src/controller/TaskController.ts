@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import Task from "../models/Task";
+import logger from "../shared/logger";
 
 export class TaskController {
     static createTask = async (req: Request, res: Response) => {
@@ -9,10 +10,15 @@ export class TaskController {
             req.project.tasks.push(task.id);
             await Promise.allSettled([task.save(), req.project.save()]);
             res.send("Tarea creada correctamente")
-        } catch (error) {
-            // desarrollo (debugear)
-            // console.log(error);
-            res.status(500).json({ error: 'hubo un error' });
+        } catch (error: any) {
+            if (error.code === 11000) {
+                return res.status(400).json({
+                    error: "La tarea ya existe",
+                    duplicateKey: error.keyValue
+                });
+            }
+
+            logger.error(error as string);
         }
     }
 
@@ -55,8 +61,16 @@ export class TaskController {
             req.task.description = req.body.description;
             await req.task.save();
             res.send("Tarea actualizada correctamente");
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            if (error.code == 11000) {
+                return res.status(400).json({
+                    error: "La tarea ya existe",
+                    duplicateKey: error.keyValue
+                });
+            }
+
+            // Manejar otros errors
+            logger.error(error as string);
         }
     }
 
